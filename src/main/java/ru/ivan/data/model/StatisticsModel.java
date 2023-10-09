@@ -1,8 +1,6 @@
-package dataclass.json;
+package ru.ivan.data.model;
 
-import java.time.LocalDate;
-
-public class Statistics {
+public class StatisticsModel {
   private String startDate;
 
   private String endDate;

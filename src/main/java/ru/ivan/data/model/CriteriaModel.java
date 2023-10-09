@@ -1,4 +1,4 @@
-package dataclass.json;
+package ru.ivan.data.model;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,10 @@ import java.util.ArrayList;
 Root root = om.readValue(myJsonString, Root.class); */
 
 
-public class Criteria {
-  public ArrayList<Criterion> criteria; //Множество критерий
+public class CriteriaModel {
+  public ArrayList<CriterionModel> criterias; //Множество критерий
 
-  public static class Criterion { //Класс являющимся одним критерием поиска
+  public static class CriterionModel { //Класс являющимся одним критерием поиска
     public String lastName;
     public String productName;
     public int minTimes;
