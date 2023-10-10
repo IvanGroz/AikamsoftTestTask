@@ -2,26 +2,30 @@ package ru.ivan;
 
 import com.google.gson.Gson;
 import ru.ivan.data.converter.CriterionConverter;
-import ru.ivan.data.repository.ConsumerRepositoryImpl;
+import ru.ivan.data.database.Database;
+import ru.ivan.data.repository.CustomerRepositoryImpl;
 import ru.ivan.data.repository.CriterionRepositoryImpl;
 import ru.ivan.domain.entity.Criterion;
-import ru.ivan.domain.repository.ConsumerRepository;
 import ru.ivan.domain.repository.CriterionRepository;
-import ru.ivan.domain.usecase.SearchConsumerUseCase;
+import ru.ivan.domain.usecase.SearchCustomerUseCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
   private static final String SEARCH_COMMAND_NAME = "search";
   private static final String STAT_COMMAND_NAME = "stat";
-  private static final SearchConsumerUseCase searchConsumerUseCase = new SearchConsumerUseCase(
-          new CriterionRepositoryImpl(
-                  new Gson(),
-                  new CriterionConverter()
-          ),
-          new ConsumerRepositoryImpl()
+  private static final SearchCustomerUseCase searchCustomerUseCase =
+          new SearchCustomerUseCase(new CriterionRepositoryImpl(
+          new Gson(),
+          new CriterionConverter()
+  ), new CustomerRepositoryImpl());
+  private static final Database database = new Database("postgres",
+                                                        "1824",
+                                                        false,
+                                                        "jdbc:postgresql://localhost:5432/purchases"
   );
 
   public static void main(String @NotNull [] args) {
@@ -41,10 +45,17 @@ public class Main {
 
         //getCriteria(jsonInput);
         try {
-          searchConsumerUseCase.invoke(jsonInput);
-        } catch (FileNotFoundException e) {
-          throw new RuntimeException(e);
+          database.connect();
+          searchCustomerUseCase.invoke(jsonInput, database);
+        } catch (FileNotFoundException f)
+        {
+          f.printStackTrace();
         }
+        catch (SQLException e) {
+          throw new RuntimeException(e);
+
+        }
+
         break;
       case STAT_COMMAND_NAME:
         /*
@@ -62,14 +73,15 @@ public class Main {
       default:
 
 
-      break;
+        break;
     }
 
   }
 
   private static void getCriteria(String jsonInput) {
     CriterionRepository repository = new CriterionRepositoryImpl(new Gson(),
-                                                                 new CriterionConverter());
+                                                                 new CriterionConverter()
+    );
     try {
       List<Criterion> all = repository.getAll(jsonInput);
       System.out.println(all);
