@@ -8,8 +8,8 @@ public class Criterion {
   public Integer maxExpenses = null;
   public Integer badCustomers = null;
 
-  public Criterion(String lastName, String productName, int minTimes, int minExpenses,
-                   int maxExpenses, int badCustomers) {
+  public Criterion(String lastName, String productName, Integer minTimes, Integer minExpenses,
+                   Integer maxExpenses, Integer badCustomers) {
     this.lastName = lastName;
     this.productName = productName;
     this.minTimes = minTimes;

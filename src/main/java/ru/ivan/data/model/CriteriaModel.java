@@ -14,10 +14,10 @@ public class CriteriaModel {
   public static class CriterionModel { //Класс являющимся одним критерием поиска
     public String lastName;
     public String productName;
-    public int minTimes;
-    public int minExpenses;
-    public int maxExpenses;
-    public int badCustomers;
+    public Integer minTimes;
+    public Integer minExpenses;
+    public Integer maxExpenses;
+    public Integer badCustomers;
   }
 }
 

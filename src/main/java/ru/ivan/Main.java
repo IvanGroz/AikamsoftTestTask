@@ -1,16 +1,20 @@
 package ru.ivan;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import ru.ivan.data.converter.CriterionConverter;
 import ru.ivan.data.database.Database;
 import ru.ivan.data.repository.CustomerRepositoryImpl;
 import ru.ivan.data.repository.CriterionRepositoryImpl;
+import ru.ivan.data.repository.SearchResultsRepositoryImpl;
 import ru.ivan.domain.entity.Criterion;
+import ru.ivan.domain.entity.SearchResults;
 import ru.ivan.domain.repository.CriterionRepository;
 import ru.ivan.domain.usecase.SearchCustomerUseCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -18,10 +22,14 @@ public class Main {
   private static final String SEARCH_COMMAND_NAME = "search";
   private static final String STAT_COMMAND_NAME = "stat";
   private static final SearchCustomerUseCase searchCustomerUseCase =
-          new SearchCustomerUseCase(new CriterionRepositoryImpl(
-          new Gson(),
-          new CriterionConverter()
-  ), new CustomerRepositoryImpl());
+          new SearchCustomerUseCase(
+                  new CriterionRepositoryImpl(
+                          new GsonBuilder().serializeNulls().create(),
+                          new CriterionConverter()
+                  ),
+                  new CustomerRepositoryImpl(),
+                  new SearchResultsRepositoryImpl(new Gson())
+          );
   private static final Database database = new Database("postgres",
                                                         "1824",
                                                         false,
@@ -31,13 +39,15 @@ public class Main {
   public static void main(String @NotNull [] args) {
 
 
-    String jsonInput;
+    String jsonInput , jsonOutput;
     try {//считываем режим работы
       jsonInput = args[1];
+      jsonOutput = args[2];
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println("Не указан в аргументах программы путь к файлу JSON!");
     }
     jsonInput = "src/main/resources/json.json";
+    jsonOutput = "src/main/resources/out.json";
     String jsonInput2 = "src/main/resources/json2.json";
 
     switch (args[0]) {
@@ -46,12 +56,11 @@ public class Main {
         //getCriteria(jsonInput);
         try {
           database.connect();
-          searchCustomerUseCase.invoke(jsonInput, database);
-        } catch (FileNotFoundException f)
-        {
-          f.printStackTrace();
-        }
-        catch (SQLException e) {
+          SearchResults searchResults = searchCustomerUseCase.invoke(jsonInput,jsonOutput, database);
+          database.disconnect();
+        } catch (IOException e) {
+          e.printStackTrace();
+        } catch (SQLException e) {
           throw new RuntimeException(e);
 
         }

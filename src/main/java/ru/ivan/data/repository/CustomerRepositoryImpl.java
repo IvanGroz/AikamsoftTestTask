@@ -7,6 +7,7 @@ import ru.ivan.domain.repository.CustomerRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,20 +43,28 @@ public class CustomerRepositoryImpl implements CustomerRepository {
   @Override
   public Map<Criterion, List<Customer>> getCustomerByCriteria(List<Criterion> criteria,
                                                               Database db) throws SQLException {
-    // TODO: 09.10.2023 чтение из БД и конвертация в domain
-    Map<Criterion, List<Customer>> result = new HashMap<Criterion, List<Customer>>();
+
+    Map<Criterion, List<Customer>> result = new HashMap<>();
 
     for (Criterion criterion : criteria) {
       ResultSet rs = db.execute(getSQL(criterion));
+
       result.put(criterion,convertResultSetToCostumerList(rs));
     }
 
     return result;
   }
 
-  private List<Customer> convertResultSetToCostumerList(ResultSet rs){
+  private List<Customer> convertResultSetToCostumerList(ResultSet rs) throws SQLException {
+    List<Customer> customerList;
+    customerList = new ArrayList<>();
 
-    return null;
+    while (rs.next()){
+      String name = rs.getString("name");
+      String surname = rs.getString("surname");
+      customerList.add(new Customer(name,surname));
+    }
+    return customerList;
   }
   private String getSQL(Criterion criterion) {
     if (criterion.lastName != null) {

@@ -24,12 +24,9 @@ public class Database {
   }
 
   public ResultSet execute(String sql) throws SQLException {
-    try (
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql)
-    ) {
-      return rs;
-    }
+    Statement statement = connection.createStatement();
+    return statement.executeQuery(sql);
+
   }
 
   public void disconnect() throws SQLException {
