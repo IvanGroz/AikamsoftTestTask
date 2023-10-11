@@ -2,44 +2,48 @@ package ru.ivan;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.jetbrains.annotations.NotNull;
 import ru.ivan.data.converter.CriterionConverter;
 import ru.ivan.data.database.Database;
-import ru.ivan.data.repository.CustomerRepositoryImpl;
+import ru.ivan.data.datasource.CustomerDataSourceImpl;
 import ru.ivan.data.repository.CriterionRepositoryImpl;
-import ru.ivan.data.repository.SearchResultsRepositoryImpl;
+import ru.ivan.data.repository.CustomerRepositoryImpl;
 import ru.ivan.domain.entity.Criterion;
-import ru.ivan.domain.entity.SearchResults;
+import ru.ivan.domain.entity.Customer;
 import ru.ivan.domain.repository.CriterionRepository;
-import ru.ivan.domain.usecase.SearchCustomerUseCase;
-import org.jetbrains.annotations.NotNull;
+import ru.ivan.domain.scenario.SearchCustomerScenario;
+import ru.ivan.domain.usecase.GetCriteriaUseCase;
+import ru.ivan.domain.usecase.GetCustomersUseCase;
+import ru.ivan.presentation.SearchReportPrinter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
   private static final String SEARCH_COMMAND_NAME = "search";
   private static final String STAT_COMMAND_NAME = "stat";
-  private static final SearchCustomerUseCase searchCustomerUseCase =
-          new SearchCustomerUseCase(
-                  new CriterionRepositoryImpl(
-                          new GsonBuilder().serializeNulls().create(),
-                          new CriterionConverter()
-                  ),
-                  new CustomerRepositoryImpl(),
-                  new SearchResultsRepositoryImpl(new Gson())
-          );
-  private static final Database database = new Database("postgres",
+  private static final Database DATABASE = new Database("postgres",
                                                         "1824",
                                                         false,
                                                         "jdbc:postgresql://localhost:5432/purchases"
   );
+  private static final SearchCustomerScenario SEARCH_CUSTOMER_SCENARIO = new SearchCustomerScenario(
+          new GetCriteriaUseCase(new CriterionRepositoryImpl(new GsonBuilder().serializeNulls()
+                                                                     .create(),
+                                                             new CriterionConverter()
+          )),
+          new GetCustomersUseCase(new CustomerRepositoryImpl(new CustomerDataSourceImpl(DATABASE)))
+  );
+  private static final SearchReportPrinter SEARCH_REPORT_PRINTER =
+          new SearchReportPrinter(new Gson());
 
   public static void main(String @NotNull [] args) {
 
 
-    String jsonInput , jsonOutput;
+    String jsonInput, jsonOutput;
     try {//считываем режим работы
       jsonInput = args[1];
       jsonOutput = args[2];
@@ -55,9 +59,10 @@ public class Main {
 
         //getCriteria(jsonInput);
         try {
-          database.connect();
-          SearchResults searchResults = searchCustomerUseCase.invoke(jsonInput,jsonOutput, database);
-          database.disconnect();
+          DATABASE.connect();
+          Map<Criterion, List<Customer>> searchResults = SEARCH_CUSTOMER_SCENARIO.invoke(jsonInput);
+          SEARCH_REPORT_PRINTER.print(searchResults, jsonOutput);
+          DATABASE.disconnect();
         } catch (IOException e) {
           e.printStackTrace();
         } catch (SQLException e) {

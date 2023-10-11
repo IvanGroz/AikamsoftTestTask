@@ -3,12 +3,20 @@
   "results": [
     {
       "criteria": {
-        "lastName": "Иванов"
+        "badCustomers": 3
       },
       "results": [
         {
-          "firstName": "Илья",
-          "lastName": "Иванов"
+          "firstName": "Александр",
+          "lastName": "Юдин"
+        },
+        {
+          "firstName": "Тимофей",
+          "lastName": "Панин"
+        },
+        {
+          "firstName": "Аврора",
+          "lastName": "Григорьева"
         }
       ]
     },
@@ -74,20 +82,12 @@
     },
     {
       "criteria": {
-        "badCustomers": 3
+        "lastName": "Иванов"
       },
       "results": [
         {
-          "firstName": "Александр",
-          "lastName": "Юдин"
-        },
-        {
-          "firstName": "Тимофей",
-          "lastName": "Панин"
-        },
-        {
-          "firstName": "Аврора",
-          "lastName": "Григорьева"
+          "firstName": "Илья",
+          "lastName": "Иванов"
         }
       ]
     }
