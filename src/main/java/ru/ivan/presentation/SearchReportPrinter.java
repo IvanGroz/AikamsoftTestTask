@@ -36,11 +36,11 @@ public class SearchReportPrinter {
   }
 
   public void print(Map<Criterion, List<Customer>> results, String fileName) throws IOException {
-    Report report = getSearchResults(results);
+    Report report = convertSearchResults(results);
     toJsonSearchResults(fileName, report);
   }
 
-  private Report getSearchResults(Map<Criterion, List<Customer>> results) {
+  private Report convertSearchResults(Map<Criterion, List<Customer>> results) {
     ArrayList<Report.ReportElement> resultsLists = new ArrayList<>();
     for (Map.Entry<Criterion, List<Customer>> entry : results.entrySet()) {
       Criterion key = entry.getKey();

@@ -2,8 +2,8 @@ package ru.ivan.domain.entity;
 
 public class Statistics {
   private final String type = "stat";
-  private Integer totalDays;
-  private CustomerPurchases[] customers;
+  private final Integer totalDays;
+  private final CustomerPurchases[] customers;
 
   public Statistics(Integer totalDays, CustomerPurchases[] customers) {
     this.totalDays = totalDays;
@@ -11,8 +11,8 @@ public class Statistics {
   }
 
   public static class CustomerPurchases{
-    private String name;
-    private Purchase[] purchases;
+    private final String name;
+    private final Purchase[] purchases;
 
     public CustomerPurchases(String name, Purchase[] purchases) {
       this.name = name;
@@ -29,9 +29,9 @@ public class Statistics {
 
     public static class Purchase {
       private final String name;
-      private final Long expenses;
+      private final Float expenses;
 
-      public Purchase(String name, Long expenses) {
+      public Purchase(String name, Float expenses) {
         this.name = name;
         this.expenses = expenses;
       }
@@ -40,7 +40,7 @@ public class Statistics {
         return name;
       }
 
-      public Long getExpenses() {
+      public Float getExpenses() {
         return expenses;
       }
     }

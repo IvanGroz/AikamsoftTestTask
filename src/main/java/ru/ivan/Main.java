@@ -22,6 +22,7 @@ import ru.ivan.domain.usecase.GetCustomersUseCase;
 import ru.ivan.domain.usecase.GetStatisticsDateUseCase;
 import ru.ivan.domain.usecase.GetStatisticsUseCase;
 import ru.ivan.presentation.SearchReportPrinter;
+import ru.ivan.presentation.StatisticsReportPrinter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -48,10 +49,14 @@ public class Main {
           new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new Gson(),
                                                                         new StatisticsDateConverter()
           )),
-          new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(DATABASE)))
+          new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(
+                  DATABASE)))
   );
   private static final SearchReportPrinter SEARCH_REPORT_PRINTER =
           new SearchReportPrinter(new Gson());
+
+  private static final StatisticsReportPrinter STATISTICS_REPORT_PRINTER =
+          new StatisticsReportPrinter(new Gson());
 
   public static void main(String @NotNull [] args) {
 
@@ -86,7 +91,7 @@ public class Main {
         try {
           DATABASE.connect();
           Statistics statistics = STATISTICS_CUSTOMER_SCENARIO.invoke(jsonInput2);
-          //SEARCH_REPORT_PRINTER.print(searchResults, jsonOutput);
+          STATISTICS_REPORT_PRINTER.print(statistics,jsonOutput);
           DATABASE.disconnect();
         } catch (IOException e) {
           e.printStackTrace();

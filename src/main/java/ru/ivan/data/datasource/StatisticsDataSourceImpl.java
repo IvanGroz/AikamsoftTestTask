@@ -58,7 +58,7 @@ public class StatisticsDataSourceImpl implements StatisticsDataSource {
       }
 
       String title = statistics.getString("title");
-      Long sum = statistics.getLong("sum");
+      Float sum = statistics.getFloat("sum");
       purchases.add(new Purchase(title, sum));
       //customerList.add(new Customer(name, surname));
     }

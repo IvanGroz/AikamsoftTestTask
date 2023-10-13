@@ -1,1 +1,257 @@
-{"type":"search","results":[{"criteria":{"lastName":"Павлов"},"results":[{"firstName":"Иван","lastName":"Павлов"}]},{"criteria":{"badCustomers":3},"results":[{"firstName":"Александр","lastName":"Юдин"},{"firstName":"Тимофей","lastName":"Панин"},{"firstName":"Аврора","lastName":"Григорьева"}]},{"criteria":{"productName":"Сыр","minTimes":5},"results":[{"firstName":"Даниил","lastName":"Прокофьев"},{"firstName":"Асия","lastName":"Севастьянова"}]},{"criteria":{"minExpenses":112,"maxExpenses":4000},"results":[{"firstName":"Аврора","lastName":"Григорьева"},{"firstName":"Асия","lastName":"Севастьянова"},{"firstName":"Тимофей","lastName":"Панин"},{"firstName":"Елизавета","lastName":"Никифорова"},{"firstName":"Андрей","lastName":"Романов"},{"firstName":"Даниил","lastName":"Прокофьев"},{"firstName":"Александр","lastName":"Юдин"},{"firstName":"Вероника","lastName":"Гришина"},{"firstName":"Иван","lastName":"Павлов"},{"firstName":"Илья","lastName":"Иванов"}]}]}
+{
+  "type": "stat",
+  "totalDays": 270,
+  "customers": [
+    {
+      "name": "Аврора Григорьева",
+      "purchases": [
+        {
+          "name": "Куриное филе",
+          "expenses": 256.9
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 119.7
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 252.5
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 296.7
+        }
+      ]
+    },
+    {
+      "name": "Александр Юдин",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 310.5
+        },
+        {
+          "name": "Куриное филе",
+          "expenses": 256.9
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 39.9
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 296.7
+        }
+      ]
+    },
+    {
+      "name": "Андрей Романов",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 310.5
+        },
+        {
+          "name": "Куриное филе",
+          "expenses": 256.9
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 35.5
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 98.9
+        }
+      ]
+    },
+    {
+      "name": "Асия Севастьянова",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 621.0
+        },
+        {
+          "name": "Куриное филе",
+          "expenses": 770.7
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 39.9
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 757.5
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 35.5
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 98.9
+        }
+      ]
+    },
+    {
+      "name": "Вероника Гришина",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 310.5
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 79.8
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 252.5
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 35.5
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 197.8
+        }
+      ]
+    },
+    {
+      "name": "Даниил Прокофьев",
+      "purchases": [
+        {
+          "name": "Куриное филе",
+          "expenses": 256.9
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 252.5
+        },
+        {
+          "name": "Сыр",
+          "expenses": 36.6
+        }
+      ]
+    },
+    {
+      "name": "Даниил Филимонов",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 310.5
+        },
+        {
+          "name": "Куриное филе",
+          "expenses": 513.8
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 39.9
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 757.5
+        }
+      ]
+    },
+    {
+      "name": "Елизавета Никифорова",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 621.0
+        },
+        {
+          "name": "Куриное филе",
+          "expenses": 256.9
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 79.8
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 252.5
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 35.5
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 98.9
+        }
+      ]
+    },
+    {
+      "name": "Иван Павлов",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 310.5
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 505.0
+        },
+        {
+          "name": "Сыр",
+          "expenses": 12.2
+        },
+        {
+          "name": "Чипсы Lays",
+          "expenses": 197.8
+        }
+      ]
+    },
+    {
+      "name": "Илья Иванов",
+      "purchases": [
+        {
+          "name": "Куриное филе",
+          "expenses": 770.7
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 79.8
+        },
+        {
+          "name": "Сливочное масло",
+          "expenses": 252.5
+        },
+        {
+          "name": "Сыр",
+          "expenses": 12.2
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 71.0
+        }
+      ]
+    },
+    {
+      "name": "Тимофей Панин",
+      "purchases": [
+        {
+          "name": "Колбаса Докторская",
+          "expenses": 931.5
+        },
+        {
+          "name": "Минеральная вода",
+          "expenses": 39.9
+        },
+        {
+          "name": "Сыр",
+          "expenses": 12.2
+        },
+        {
+          "name": "Хлеб",
+          "expenses": 35.5
+        }
+      ]
+    }
+  ]
+}
