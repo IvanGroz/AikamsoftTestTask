@@ -1,25 +1,19 @@
-package ru.ivan.data.model;
+package ru.ivan.domain.entity;
 
-public class StatisticsModel {
+public class StatisticsDate {
   private String startDate;
-
   private String endDate;
 
   public String getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
-  }
-
   public String getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(String endDate) {
+  public StatisticsDate(String startDate, String endDate) {
+    this.startDate = startDate;
     this.endDate = endDate;
   }
-
-
 }

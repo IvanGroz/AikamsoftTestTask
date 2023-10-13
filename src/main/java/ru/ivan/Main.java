@@ -4,19 +4,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 import ru.ivan.data.converter.CriterionConverter;
+import ru.ivan.data.converter.StatisticsDateConverter;
 import ru.ivan.data.database.Database;
 import ru.ivan.data.datasource.CustomerDataSourceImpl;
+import ru.ivan.data.datasource.StatisticsDataSourceImpl;
 import ru.ivan.data.repository.CriterionRepositoryImpl;
 import ru.ivan.data.repository.CustomerRepositoryImpl;
+import ru.ivan.data.repository.StatisticsDateRepositoryImpl;
+import ru.ivan.data.repository.StatisticsRepositoryImpl;
 import ru.ivan.domain.entity.Criterion;
 import ru.ivan.domain.entity.Customer;
-import ru.ivan.domain.repository.CriterionRepository;
+import ru.ivan.domain.entity.Statistics;
 import ru.ivan.domain.scenario.SearchCustomerScenario;
+import ru.ivan.domain.scenario.StatisticsCustomerScenario;
 import ru.ivan.domain.usecase.GetCriteriaUseCase;
 import ru.ivan.domain.usecase.GetCustomersUseCase;
+import ru.ivan.domain.usecase.GetStatisticsDateUseCase;
+import ru.ivan.domain.usecase.GetStatisticsUseCase;
 import ru.ivan.presentation.SearchReportPrinter;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -37,6 +43,13 @@ public class Main {
           )),
           new GetCustomersUseCase(new CustomerRepositoryImpl(new CustomerDataSourceImpl(DATABASE)))
   );
+  private static final StatisticsCustomerScenario STATISTICS_CUSTOMER_SCENARIO =
+          new StatisticsCustomerScenario(
+          new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new Gson(),
+                                                                        new StatisticsDateConverter()
+          )),
+          new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(DATABASE)))
+  );
   private static final SearchReportPrinter SEARCH_REPORT_PRINTER =
           new SearchReportPrinter(new Gson());
 
@@ -56,8 +69,6 @@ public class Main {
 
     switch (args[0]) {
       case SEARCH_COMMAND_NAME:
-
-        //getCriteria(jsonInput);
         try {
           DATABASE.connect();
           Map<Criterion, List<Customer>> searchResults = SEARCH_CUSTOMER_SCENARIO.invoke(jsonInput);
@@ -69,20 +80,20 @@ public class Main {
           throw new RuntimeException(e);
 
         }
-
         break;
-      case STAT_COMMAND_NAME:
-        /*
-        *
-        try {
-          JsonProcessing json = new JsonProcessing(jsonInput2);
-          Statistics statistics =  json.getReadResults(Statistics.class);
-          System.out.println(statistics);
-        } catch (FileNotFoundException e) {
-          throw new RuntimeException(e);
-        }
 
-        * */
+      case STAT_COMMAND_NAME:
+        try {
+          DATABASE.connect();
+          Statistics statistics = STATISTICS_CUSTOMER_SCENARIO.invoke(jsonInput2);
+          //SEARCH_REPORT_PRINTER.print(searchResults, jsonOutput);
+          DATABASE.disconnect();
+        } catch (IOException e) {
+          e.printStackTrace();
+        } catch (SQLException e) {
+          throw new RuntimeException(e);
+
+        }
         break;
       default:
 
@@ -92,15 +103,5 @@ public class Main {
 
   }
 
-  private static void getCriteria(String jsonInput) {
-    CriterionRepository repository = new CriterionRepositoryImpl(new Gson(),
-                                                                 new CriterionConverter()
-    );
-    try {
-      List<Criterion> all = repository.getAll(jsonInput);
-      System.out.println(all);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-  }
+
 }
