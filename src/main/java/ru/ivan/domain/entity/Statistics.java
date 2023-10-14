@@ -13,10 +13,12 @@ public class Statistics {
   public static class CustomerPurchases{
     private final String name;
     private final Purchase[] purchases;
+    private final Float totalExpenses;
 
-    public CustomerPurchases(String name, Purchase[] purchases) {
+    public CustomerPurchases(String name, Purchase[] purchases, Float totalExpenses) {
       this.name = name;
       this.purchases = purchases;
+      this.totalExpenses = totalExpenses;
     }
 
     public String getName() {
@@ -25,6 +27,10 @@ public class Statistics {
 
     public Purchase[] getPurchases() {
       return purchases;
+    }
+
+    public Float getTotalExpenses() {
+      return totalExpenses;
     }
 
     public static class Purchase {

@@ -5,6 +5,7 @@ import com.google.gson.stream.JsonReader;
 import ru.ivan.data.converter.StatisticsDateConverter;
 import ru.ivan.data.model.CriteriaModel;
 import ru.ivan.data.model.StatisticsDateModel;
+import ru.ivan.data.validator.StatisticsDateValidator;
 import ru.ivan.domain.entity.StatisticsDate;
 import ru.ivan.domain.repository.StatisticsDateRepository;
 
@@ -24,6 +25,10 @@ public class StatisticsDateRepositoryImpl implements StatisticsDateRepository {
   public StatisticsDate get(String filepath) throws FileNotFoundException {
     JsonReader jsonReader = new JsonReader(new FileReader(filepath));
     StatisticsDateModel model = gson.fromJson(jsonReader, StatisticsDateModel.class);
-    return converter.convert(model);
+    
+    StatisticsDateValidator statisticsDateValidator=new StatisticsDateValidator();
+     StatisticsDate statisticsDate = converter.convert(model);
+    statisticsDateValidator.validate(statisticsDate);
+    return statisticsDate;
   }
 }

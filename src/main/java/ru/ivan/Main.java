@@ -21,6 +21,7 @@ import ru.ivan.domain.usecase.GetCriteriaUseCase;
 import ru.ivan.domain.usecase.GetCustomersUseCase;
 import ru.ivan.domain.usecase.GetStatisticsDateUseCase;
 import ru.ivan.domain.usecase.GetStatisticsUseCase;
+import ru.ivan.presentation.ErrorReportPrinter;
 import ru.ivan.presentation.SearchReportPrinter;
 import ru.ivan.presentation.StatisticsReportPrinter;
 
@@ -46,17 +47,18 @@ public class Main {
   );
   private static final StatisticsCustomerScenario STATISTICS_CUSTOMER_SCENARIO =
           new StatisticsCustomerScenario(
-          new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new Gson(),
-                                                                        new StatisticsDateConverter()
-          )),
-          new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(
-                  DATABASE)))
-  );
+                  new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new Gson(),
+                                                                                new StatisticsDateConverter()
+                  )),
+                  new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(
+                          DATABASE)))
+          );
   private static final SearchReportPrinter SEARCH_REPORT_PRINTER =
           new SearchReportPrinter(new Gson());
 
   private static final StatisticsReportPrinter STATISTICS_REPORT_PRINTER =
           new StatisticsReportPrinter(new Gson());
+  private static final ErrorReportPrinter ERROR_REPORT_PRINTER = new ErrorReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
 
   public static void main(String @NotNull [] args) {
 
@@ -79,11 +81,12 @@ public class Main {
           Map<Criterion, List<Customer>> searchResults = SEARCH_CUSTOMER_SCENARIO.invoke(jsonInput);
           SEARCH_REPORT_PRINTER.print(searchResults, jsonOutput);
           DATABASE.disconnect();
-        } catch (IOException e) {
-          e.printStackTrace();
-        } catch (SQLException e) {
-          throw new RuntimeException(e);
-
+        } catch (Exception e) {
+          try {
+            ERROR_REPORT_PRINTER.print(jsonOutput,e);
+          } catch (IOException ex) {
+            throw new RuntimeException(ex);
+          }
         }
         break;
 
@@ -91,13 +94,14 @@ public class Main {
         try {
           DATABASE.connect();
           Statistics statistics = STATISTICS_CUSTOMER_SCENARIO.invoke(jsonInput2);
-          STATISTICS_REPORT_PRINTER.print(statistics,jsonOutput);
+          STATISTICS_REPORT_PRINTER.print(statistics, jsonOutput);
           DATABASE.disconnect();
-        } catch (IOException e) {
-          e.printStackTrace();
-        } catch (SQLException e) {
-          throw new RuntimeException(e);
-
+        } catch (Exception e) {
+          try {
+            ERROR_REPORT_PRINTER.print(jsonOutput,e);
+          } catch (IOException ex) {
+            throw new RuntimeException(ex);
+          }
         }
         break;
       default:

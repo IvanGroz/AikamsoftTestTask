@@ -45,25 +45,30 @@ public class StatisticsDataSourceImpl implements StatisticsDataSource {
     ArrayList<CustomerPurchases> customerPurchases = new ArrayList<>();
     ArrayList<Purchase> purchases = new ArrayList<>();
     String customerName = "0";
+    float totalExpenses = 0.0f;
     while (statistics.next()) {
       String nameTemp = statistics.getString("name");
       if (!customerName.equals(nameTemp)) {
         if (!purchases.isEmpty()) {
           customerPurchases.add(new CustomerPurchases(customerName,
-                                                      purchases.toArray(Purchase[]::new)
+                                                      purchases.toArray(Purchase[]::new),
+                                                      totalExpenses
           ));
           purchases = new ArrayList<>();
+          totalExpenses = 0.0f;
         }
         customerName = nameTemp;
       }
 
       String title = statistics.getString("title");
-      Float sum = statistics.getFloat("sum");
+      float sum = statistics.getFloat("sum");
+      totalExpenses += sum;
       purchases.add(new Purchase(title, sum));
       //customerList.add(new Customer(name, surname));
     }
     customerPurchases.add(new CustomerPurchases(customerName,
-                                                purchases.toArray(Purchase[]::new)
+                                                purchases.toArray(Purchase[]::new),
+                                                totalExpenses
     ));
     statisticsDays.next();
     return new Statistics(statisticsDays.getInt("days"),

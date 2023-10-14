@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import ru.ivan.data.converter.CriterionConverter;
 import ru.ivan.data.model.CriteriaModel;
+import ru.ivan.data.validator.AbstractValidator;
+import ru.ivan.data.validator.CriterionValidator;
 import ru.ivan.domain.entity.Criterion;
 import ru.ivan.domain.repository.CriterionRepository;
 
@@ -29,6 +31,9 @@ public class CriterionRepositoryImpl implements CriterionRepository {
     List<Criterion> criteria = model.criterias.stream()
                                               .map(converter::convert)
                                               .collect(Collectors.toList());
+    CriterionValidator criterionValidator =new CriterionValidator();
+
+    criteria.stream().map(criterionValidator::validate).collect(Collectors.toList());
     return criteria;
   }
 }
