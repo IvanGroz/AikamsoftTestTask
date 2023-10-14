@@ -7,6 +7,7 @@ import ru.ivan.domain.entity.Customer;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class SearchReportPrinter {
   }
 
   private void toJsonSearchResults(String fileName, Report report) throws IOException {
-    try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(fileName))) {
+    try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(fileName, StandardCharsets.UTF_8))) {
       gson.toJson(report, Report.class, jsonWriter);
 
     }

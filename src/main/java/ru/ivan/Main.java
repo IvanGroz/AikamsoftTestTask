@@ -39,40 +39,41 @@ public class Main {
                                                         "jdbc:postgresql://localhost:5432/purchases"
   );
   private static final SearchCustomerScenario SEARCH_CUSTOMER_SCENARIO = new SearchCustomerScenario(
-          new GetCriteriaUseCase(new CriterionRepositoryImpl(new GsonBuilder().serializeNulls()
-                                                                     .create(),
+          new GetCriteriaUseCase(new CriterionRepositoryImpl(new GsonBuilder().disableHtmlEscaping().create(),
                                                              new CriterionConverter()
           )),
           new GetCustomersUseCase(new CustomerRepositoryImpl(new CustomerDataSourceImpl(DATABASE)))
   );
   private static final StatisticsCustomerScenario STATISTICS_CUSTOMER_SCENARIO =
           new StatisticsCustomerScenario(
-                  new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new Gson(),
+                  new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new GsonBuilder().disableHtmlEscaping().create(),
                                                                                 new StatisticsDateConverter()
                   )),
                   new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(
                           DATABASE)))
           );
   private static final SearchReportPrinter SEARCH_REPORT_PRINTER =
-          new SearchReportPrinter(new Gson());
+          new SearchReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
 
   private static final StatisticsReportPrinter STATISTICS_REPORT_PRINTER =
-          new StatisticsReportPrinter(new Gson());
+          new StatisticsReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
   private static final ErrorReportPrinter ERROR_REPORT_PRINTER = new ErrorReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
 
   public static void main(String @NotNull [] args) {
 
 
-    String jsonInput, jsonOutput;
+    String jsonInput, jsonOutput,jsonInput2;
     try {//считываем режим работы
       jsonInput = args[1];
+      jsonInput2 = args[1];
       jsonOutput = args[2];
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println("Не указан в аргументах программы путь к файлу JSON!");
+      jsonInput = "src/main/resources/json.json";
+      jsonOutput = "src/main/resources/out.json";
+      jsonInput2 = "src/main/resources/json2.json";
     }
-    jsonInput = "src/main/resources/json.json";
-    jsonOutput = "src/main/resources/out.json";
-    String jsonInput2 = "src/main/resources/json2.json";
+
 
     switch (args[0]) {
       case SEARCH_COMMAND_NAME:

@@ -11,6 +11,8 @@ import ru.ivan.domain.repository.StatisticsDateRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class StatisticsDateRepositoryImpl implements StatisticsDateRepository {
   private final Gson gson;
@@ -22,10 +24,10 @@ public class StatisticsDateRepositoryImpl implements StatisticsDateRepository {
   }
 
   @Override
-  public StatisticsDate get(String filepath) throws FileNotFoundException {
-    JsonReader jsonReader = new JsonReader(new FileReader(filepath));
+  public StatisticsDate get(String filepath) throws IOException {
+    JsonReader jsonReader = new JsonReader(new FileReader(filepath, StandardCharsets.UTF_8));
     StatisticsDateModel model = gson.fromJson(jsonReader, StatisticsDateModel.class);
-    
+
     StatisticsDateValidator statisticsDateValidator=new StatisticsDateValidator();
      StatisticsDate statisticsDate = converter.convert(model);
     statisticsDateValidator.validate(statisticsDate);

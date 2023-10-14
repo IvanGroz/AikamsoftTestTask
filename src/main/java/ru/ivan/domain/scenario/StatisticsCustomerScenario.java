@@ -6,6 +6,7 @@ import ru.ivan.domain.usecase.GetStatisticsDateUseCase;
 import ru.ivan.domain.usecase.GetStatisticsUseCase;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class StatisticsCustomerScenario {
@@ -19,7 +20,7 @@ public class StatisticsCustomerScenario {
   }
 
 
-  public Statistics invoke(String filepath) throws FileNotFoundException, SQLException {
+  public Statistics invoke(String filepath) throws IOException, SQLException {
     StatisticsDate statisticsDate = getStatisticsDateUseCase.invoke(filepath);
     return getStatisticsUseCase.invoke(statisticsDate);
   }

@@ -11,6 +11,8 @@ import ru.ivan.domain.repository.CriterionRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +27,8 @@ public class CriterionRepositoryImpl implements CriterionRepository {
 
 
   @Override
-  public List<Criterion> getAll(String filepath) throws FileNotFoundException {
-    JsonReader jsonReader = new JsonReader(new FileReader(filepath));
+  public List<Criterion> getAll(String filepath) throws IOException {
+    JsonReader jsonReader = new JsonReader(new FileReader(filepath, StandardCharsets.UTF_8));
     CriteriaModel model = gson.fromJson(jsonReader, CriteriaModel.class);
     List<Criterion> criteria = model.criterias.stream()
                                               .map(converter::convert)
