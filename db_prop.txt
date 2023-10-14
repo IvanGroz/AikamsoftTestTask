@@ -1,0 +1,3 @@
+postgres
+1824
+jdbc:postgresql://localhost:5432/purchases

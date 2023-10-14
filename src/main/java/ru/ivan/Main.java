@@ -1,6 +1,5 @@
 package ru.ivan;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 import ru.ivan.data.converter.CriterionConverter;
@@ -25,28 +24,59 @@ import ru.ivan.presentation.ErrorReportPrinter;
 import ru.ivan.presentation.SearchReportPrinter;
 import ru.ivan.presentation.StatisticsReportPrinter;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
 public class Main {
   private static final String SEARCH_COMMAND_NAME = "search";
   private static final String STAT_COMMAND_NAME = "stat";
-  private static final Database DATABASE = new Database("postgres",
-                                                        "1824",
-                                                        false,
-                                                        "jdbc:postgresql://localhost:5432/purchases"
-  );
+
+  private static Database DATABASE;
+
+  static {
+    final String FILENAME = "db_prop.txt";
+    try (BufferedReader bufferedReader =
+                 new BufferedReader(
+                         new FileReader(FILENAME,
+                                        StandardCharsets.UTF_8
+                         )
+                 );
+    ) {
+
+      String user = bufferedReader.readLine();
+      String passw = bufferedReader.readLine();
+      String url = bufferedReader.readLine();
+      DATABASE = new Database(user,
+                              passw,
+                              false,
+                              url
+      );
+    } catch (FileNotFoundException e) {
+      System.out.println(
+              "Для подключения к БД небходимо чтобы рядом с jar-файлом лежал '" +FILENAME+"', " +
+                      "где:\n1я строка - это имя пользователя\n2я - пароль\n3я - url подключения " +
+                      "формата: 'jdbc:postgresql://localhost:5432/db_name' ");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private static final SearchCustomerScenario SEARCH_CUSTOMER_SCENARIO = new SearchCustomerScenario(
-          new GetCriteriaUseCase(new CriterionRepositoryImpl(new GsonBuilder().disableHtmlEscaping().create(),
+          new GetCriteriaUseCase(new CriterionRepositoryImpl(new GsonBuilder().disableHtmlEscaping()
+                                                                     .create(),
                                                              new CriterionConverter()
           )),
           new GetCustomersUseCase(new CustomerRepositoryImpl(new CustomerDataSourceImpl(DATABASE)))
   );
   private static final StatisticsCustomerScenario STATISTICS_CUSTOMER_SCENARIO =
           new StatisticsCustomerScenario(
-                  new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new GsonBuilder().disableHtmlEscaping().create(),
+                  new GetStatisticsDateUseCase(new StatisticsDateRepositoryImpl(new GsonBuilder().disableHtmlEscaping()
+                                                                                        .create(),
                                                                                 new StatisticsDateConverter()
                   )),
                   new GetStatisticsUseCase(new StatisticsRepositoryImpl(new StatisticsDataSourceImpl(
@@ -57,12 +87,14 @@ public class Main {
 
   private static final StatisticsReportPrinter STATISTICS_REPORT_PRINTER =
           new StatisticsReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
-  private static final ErrorReportPrinter ERROR_REPORT_PRINTER = new ErrorReportPrinter(new GsonBuilder().disableHtmlEscaping().create());
+  private static final ErrorReportPrinter ERROR_REPORT_PRINTER =
+          new ErrorReportPrinter(new GsonBuilder().disableHtmlEscaping()
+                                         .create());
 
   public static void main(String @NotNull [] args) {
 
 
-    String jsonInput, jsonOutput,jsonInput2;
+    String jsonInput, jsonOutput, jsonInput2;
     try {//считываем режим работы
       jsonInput = args[1];
       jsonInput2 = args[1];
@@ -84,7 +116,7 @@ public class Main {
           DATABASE.disconnect();
         } catch (Exception e) {
           try {
-            ERROR_REPORT_PRINTER.print(jsonOutput,e);
+            ERROR_REPORT_PRINTER.print(jsonOutput, e);
           } catch (IOException ex) {
             throw new RuntimeException(ex);
           }
@@ -99,7 +131,7 @@ public class Main {
           DATABASE.disconnect();
         } catch (Exception e) {
           try {
-            ERROR_REPORT_PRINTER.print(jsonOutput,e);
+            ERROR_REPORT_PRINTER.print(jsonOutput, e);
           } catch (IOException ex) {
             throw new RuntimeException(ex);
           }
